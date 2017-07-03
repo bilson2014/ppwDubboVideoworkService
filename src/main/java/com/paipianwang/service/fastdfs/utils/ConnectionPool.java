@@ -176,7 +176,7 @@ public class ConnectionPool {
 	}
 	
 	private void initClientGlobal() throws Exception{
-		System.out.println("网址：" + CONF_FILENAME);
+		System.out.println("conf文件地址：" + CONF_FILENAME);
 		ClientGlobal.init(CONF_FILENAME);
 	}
 

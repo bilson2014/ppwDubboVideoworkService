@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.csource.common.NameValuePair;
@@ -25,7 +26,7 @@ public class FastDFSClient {
 	private static Logger logger = Logger.getLogger(FastDFSClient.class);
 
 	private ConnectionPool pool = null;
-	private String logId = null;
+	private String logId = UUID.randomUUID().toString();
 	
     /** 连接池默认最小连接数 */  
     private long minPoolSize = 10;  
