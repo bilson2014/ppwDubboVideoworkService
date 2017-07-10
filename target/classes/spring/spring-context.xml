@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	                   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	                   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	                   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	                   http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	                   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd" > 
+
+	<context:component-scan base-package="com.paipianwang.service.video" />
+	
+	<context:component-scan base-package="com.paipianwang.service.fastdfs" />
+	
+	<!-- 采用注释的方式配置bean -->
+	<context:annotation-config />
+	
+	<!-- 读入配置属性文件 -->
+	<context:property-placeholder location="classpath:video.properties, classpath:fastdfs.properties ,classpath:public_system.properties" />
+	
+	<!-- proxy-target-class默认"false",更改为"ture"使用CGLib动态代理 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />	
+	
+	<bean id="ppwFFmpegExecutor" name="ppwFFmpegExecutor" class="com.paipianwang.service.video.utils.PPWFFmpegExecutor" init-method="init">
+		<property name="timeoutParam" value="${timeoutParam}" />
+		<property name="ffmpegParam" value="${ffmpegParam}" />
+		<property name="ffprobeParam" value="${ffprobeParam}" />
+		<property name="bitRate" value="${bitRate}" />
+	</bean>
+	
+	<bean class="com.paipianwang.service.fastdfs.component.FastDFSClient" init-method="init">
+		<property name="minPoolSize" value="${minPoolSize}" />
+		<property name="maxPoolSize" value="${maxPoolSize}" />
+		<property name="waitTimes" value="${waitTimes}" />
+	</bean>
+	
+	<bean id="globalConstants" class="com.paipianwang.service.video.domian.GlobalConstants">
+		<constructor-arg name="inputFileDir" value="${inputdir}" />
+		<constructor-arg name="convertFileDir" value="${outputdir}" />
+		<constructor-arg name="checkInputDir" value="${checkinputdir}" />
+		<constructor-arg name="reportDir" value="${reportdir}" />
+	</bean>
+	
+	<import resource="classpath:spring/dubbo-provider.xml" />
+</beans>
